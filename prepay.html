@@ -835,7 +835,6 @@
 
 </style>
 <style id="brand-css-inline">
-/* ==== wclub ==== */
 /* W 클럽 — 자동 생성 파일 (design-system/build-tokens.js) */
 /* 소스: tokens/wclub/ + tokens/global/ */
 /* ⚠ global.css를 먼저 로드한 뒤 이 파일을 로드하세요. 이 파일에는 브랜드별로 값이 달라지는 토큰만 포함됩니다. */
@@ -889,7 +888,6 @@ body[data-brand="wclub"] {
 
 /* Typography 유틸리티 클래스 */
 
-/* ==== w_highend ==== */
 /* W 하이엔드 — 자동 생성 파일 (design-system/build-tokens.js) */
 /* 소스: tokens/w_highend/ + tokens/global/ */
 /* ⚠ global.css를 먼저 로드한 뒤 이 파일을 로드하세요. 이 파일에는 브랜드별로 값이 달라지는 토큰만 포함됩니다. */
@@ -943,7 +941,6 @@ body[data-brand="w_highend"] {
 
 /* Typography 유틸리티 클래스 */
 
-/* ==== w_standard ==== */
 /* W 스탠다드 — 자동 생성 파일 (design-system/build-tokens.js) */
 /* 소스: tokens/w_standard/ + tokens/global/ */
 /* ⚠ global.css를 먼저 로드한 뒤 이 파일을 로드하세요. 이 파일에는 브랜드별로 값이 달라지는 토큰만 포함됩니다. */
@@ -997,7 +994,6 @@ body[data-brand="w_standard"] {
 
 /* Typography 유틸리티 클래스 */
 
-/* ==== highend_dolsing ==== */
 /* W 하이엔드 돌싱 — 자동 생성 파일 (design-system/build-tokens.js) */
 /* 소스: tokens/highend_dolsing/ + tokens/global/ */
 /* ⚠ global.css를 먼저 로드한 뒤 이 파일을 로드하세요. 이 파일에는 브랜드별로 값이 달라지는 토큰만 포함됩니다. */
@@ -1051,7 +1047,6 @@ body[data-brand="highend_dolsing"] {
 
 /* Typography 유틸리티 클래스 */
 
-/* ==== dolsings ==== */
 /* 돌싱즈 — 자동 생성 파일 (design-system/build-tokens.js) */
 /* 소스: tokens/dolsings/ + tokens/global/ */
 /* ⚠ global.css를 먼저 로드한 뒤 이 파일을 로드하세요. 이 파일에는 브랜드별로 값이 달라지는 토큰만 포함됩니다. */
@@ -1105,7 +1100,6 @@ body[data-brand="dolsings"] {
 
 /* Typography 유틸리티 클래스 */
 
-/* ==== itsmarry ==== */
 /* 결혼이지 (itsmarry) — 자동 생성 파일 (design-system/build-tokens.js) */
 /* 소스: tokens/itsmarry/ + tokens/global/ */
 /* ⚠ global.css를 먼저 로드한 뒤 이 파일을 로드하세요. 이 파일에는 브랜드별로 값이 달라지는 토큰만 포함됩니다. */
@@ -1159,7 +1153,6 @@ body[data-brand="itsmarry"] {
 
 /* Typography 유틸리티 클래스 */
 
-/* ==== wemeet ==== */
 /* 위밋 (WEMEET) — 자동 생성 파일 (design-system/build-tokens.js) */
 /* 소스: tokens/wemeet/ + tokens/global/ */
 /* ⚠ global.css를 먼저 로드한 뒤 이 파일을 로드하세요. 이 파일에는 브랜드별로 값이 달라지는 토큰만 포함됩니다. */
@@ -1213,7 +1206,6 @@ body[data-brand="wemeet"] {
 
 /* Typography 유틸리티 클래스 */
 
-/* ==== sky_drop ==== */
 /* 스카이드롭 — 자동 생성 파일 (design-system/build-tokens.js) */
 /* 소스: tokens/sky_drop/ + tokens/global/ */
 /* ⚠ global.css를 먼저 로드한 뒤 이 파일을 로드하세요. 이 파일에는 브랜드별로 값이 달라지는 토큰만 포함됩니다. */
@@ -1267,7 +1259,6 @@ body[data-brand="sky_drop"] {
 
 /* Typography 유틸리티 클래스 */
 
-/* ==== startup_match ==== */
 /* 스타트업매치 — 자동 생성 파일 (design-system/build-tokens.js) */
 /* 소스: tokens/startup_match/ + tokens/global/ */
 /* ⚠ global.css를 먼저 로드한 뒤 이 파일을 로드하세요. 이 파일에는 브랜드별로 값이 달라지는 토큰만 포함됩니다. */
@@ -2943,6 +2934,7 @@ body[data-brand="startup_match"] .mc-banner{background:var(--bg-statusBanner);}
   });
 
   window.addEventListener("hashchange", function(){ var b=(location.hash||"").replace("#",""); if (PAIRS.hasOwnProperty(b)) apply(b); });
+  window.__applyBrand = apply;
   if (window.self !== window.top) { document.body.classList.add("embedded"); }
   var init = (location.hash || "").replace("#","");
   apply(PAIRS.hasOwnProperty(init) ? init : 'wemeet');
