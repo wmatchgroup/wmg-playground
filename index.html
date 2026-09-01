@@ -486,6 +486,29 @@
   .ctab.toneDark .it.on { color: #f5f5f5; }
   .ctab.toneDark .ind::before { background: #f5f5f5; }
 
+  /* ---- claude usage guide ---- */
+  .steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  @media (max-width: 860px) { .steps { grid-template-columns: 1fr; } }
+  .stepc { background: var(--surface); border: 1px solid var(--line); padding: 20px 22px 18px; }
+  .stepc .sn { font-size: 12.5px; font-weight: 700; color: var(--gold-deep); letter-spacing: .06em; }
+  .stepc b { display: block; font-size: 16.5px; margin: 4px 0 7px; }
+  .stepc p { margin: 0; font-size: 14px; color: var(--ink-soft); line-height: 1.7; }
+  .cmd { display: block; background: #221f19; color: #e8e2d2; padding: 11px 15px; font-family: ui-monospace, Menlo, monospace; font-size: 12.5px; margin-top: 12px; overflow-x: auto; white-space: nowrap; }
+  .skillTbl { background: var(--surface); border: 1px solid var(--line); overflow-x: auto; }
+  .skillTbl table { border-collapse: collapse; width: 100%; min-width: 560px; }
+  .skillTbl td { padding: 12px 18px; border-top: 1px solid var(--line); font-size: 14px; color: var(--ink-soft); }
+  .skillTbl tr:first-child td { border-top: 0; }
+  .skillTbl td:first-child { font-family: ui-monospace, Menlo, monospace; font-size: 13px; color: var(--ink); font-weight: 700; white-space: nowrap; }
+  .says { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  @media (max-width: 700px) { .says { grid-template-columns: 1fr; } }
+  .say { background: var(--surface); border: 1px solid var(--line); padding: 14px 18px; font-size: 14.5px; color: var(--ink); }
+  .say small { display: block; margin-top: 5px; font-size: 12.5px; color: var(--ink-faint); }
+  .autoList { background: var(--surface); border: 1px solid var(--line); padding: 8px 24px; }
+  .autoList li { padding: 9px 0; border-top: 1px solid var(--line); font-size: 14.5px; color: var(--ink-soft); list-style: none; }
+  .autoList li:first-child { border-top: 0; }
+  .autoList li b { color: var(--ink); }
+  .autoList ul { margin: 0; padding: 0; }
+
   /* ---- docs view ---- */
   .layers { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
   .layer { background: var(--surface); border: 1px solid var(--line); padding: 20px 22px 16px; }
@@ -628,6 +651,10 @@
       <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1.5" y="1.5" width="5.4" height="5.4"/><rect x="9.1" y="1.5" width="5.4" height="5.4"/><rect x="1.5" y="9.1" width="5.4" height="5.4"/><rect x="9.1" y="9.1" width="5.4" height="5.4"/></svg>
       개요
     </button>
+    <button class="nav" data-v="guide">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 3.5A1.5 1.5 0 0 1 3.5 2h9A1.5 1.5 0 0 1 14 3.5v6A1.5 1.5 0 0 1 12.5 11H8l-3.2 2.8A.5.5 0 0 1 4 13.4V11h-.5A1.5 1.5 0 0 1 2 9.5z"/><path d="M5 5.5h6M5 7.8h4"/></svg>
+      클로드 사용법
+    </button>
     <button class="nav" data-v="play">
       <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1.5" y="1.5" width="13" height="13"/><path d="M6.5 5.5v5l4-2.5z" fill="currentColor" stroke="none"/></svg>
       플레이그라운드
@@ -699,6 +726,71 @@
         </div>
 
         <button class="golink" id="goPlay">플레이그라운드에서 직접 갈아끼워 보기 →</button>
+      </div>
+
+      <!-- ===== claude usage guide ===== -->
+      <div class="view" data-v="guide">
+        <h1 class="pgtitle">클로드에 시스템 적용해서 사용하는 법</h1>
+        <p class="pgsub">기획자, 대표 누구든 코드 없이 말로 화면을 만들 수 있습니다. 이 디자인 시스템 저장소는 클로드용 운영 매뉴얼(CLAUDE.md)이 내장되어 있어서, 저장소 폴더에서 클로드를 열면 브랜드 규칙과 토큰, 검수 절차를 스스로 읽고 따릅니다. 별도의 "학습"을 시킬 필요가 없습니다.</p>
+
+        <h3 class="sub">준비, 처음 한 번만</h3>
+        <div class="steps">
+          <div class="stepc">
+            <div class="sn">STEP 1</div>
+            <b>저장소 받기</b>
+            <p>GitHub에서 wmg-design 저장소 접근 권한을 받은 뒤, 터미널에서 한 줄이면 됩니다.</p>
+            <code class="cmd">git clone https://github.com/wmatchgroup/wmg-design.git</code>
+          </div>
+          <div class="stepc">
+            <div class="sn">STEP 2</div>
+            <b>Claude Code 설치</b>
+            <p>클로드 데스크톱 앱 또는 터미널용 Claude Code를 설치하고 로그인합니다.</p>
+            <code class="cmd">npm install -g @anthropic-ai/claude-code</code>
+          </div>
+          <div class="stepc">
+            <div class="sn">STEP 3</div>
+            <b>폴더에서 클로드 열기</b>
+            <p>wmg-design 폴더에서 클로드를 실행하면 끝. 규칙 문서(브랜드 가이드, 기능 매트릭스, 토큰)를 클로드가 자동으로 읽습니다.</p>
+            <code class="cmd">cd wmg-design && claude</code>
+          </div>
+        </div>
+
+        <h3 class="sub">화면 만들기, 이렇게 말하면 됩니다</h3>
+        <div class="says">
+          <div class="say">"위밋으로 만남 후기 화면 만들어줘"<small>새 화면. 브랜드를 말 안 하면 클로드가 먼저 물어봅니다.</small></div>
+          <div class="say">"이 화면 돌싱즈 버전으로도 만들어줘"<small>브랜드 전환. 스위치 한 줄로 라운드·색·톤이 통째로 바뀝니다.</small></div>
+          <div class="say">"기획안 폴더에 넣은 시안에 W클럽 디자인 입혀줘"<small>손으로 만든 기획서를 screenplan/기획안/에 넣고 요청하면 됩니다.</small></div>
+          <div class="say">"이 화면 검수하고 완성안으로 올려줘"<small>린트 검사, 실물 스크린샷 비교, 갤러리 갱신, 커밋까지 자동.</small></div>
+        </div>
+
+        <h3 class="sub">전용 명령어 (슬래시 한 번이면 더 정확합니다)</h3>
+        <div class="skillTbl">
+          <table>
+            <tr><td>/screen 위밋 "달력 화면"</td><td>새 화면을 브랜드 디자인으로 생성. 템플릿과 공통 컴포넌트로 조립하고 린트·갤러리까지 한 번에.</td></tr>
+            <tr><td>/apply "기획안.html" 위밋</td><td>기획안에 브랜드 디자인을 입혀 프로토타입으로 승격. 원본은 건드리지 않습니다.</td></tr>
+            <tr><td>/lint</td><td>디자인 규칙 위반 검수. 하드코딩된 색·라운드를 잡아냅니다.</td></tr>
+            <tr><td>/finalize "프로토타입.html"</td><td>최종 검수 통과 후 완성안으로 승격, 커밋·푸시까지.</td></tr>
+          </table>
+        </div>
+
+        <h3 class="sub">클로드가 알아서 지키는 것들</h3>
+        <div class="autoList">
+          <ul>
+            <li><b>브랜드 확인 의무.</b> 어느 브랜드용인지 말하지 않으면 임의로 진행하지 않고 반드시 물어봅니다.</li>
+            <li><b>토큰만 사용.</b> 색·서체·간격·라운드를 직접 쓰지 않고 브랜드 토큰(918개)에서만 가져옵니다.</li>
+            <li><b>기능 온오프 준수.</b> 기능 매트릭스를 보고 그 브랜드에 없는 기능(예: 결혼이지의 호감 교환)은 화면에 넣지 않습니다.</li>
+            <li><b>실물 비교 검수.</b> 완성한 화면을 실기기 스크린샷(골드 스탠다드)과 나란히 비교해 위계·밀도 차이를 스스로 찾아 고칩니다.</li>
+            <li><b>기록.</b> 완료된 작업은 인덱스·갤러리를 갱신하고 GitHub에 커밋·푸시합니다.</li>
+          </ul>
+        </div>
+
+        <h3 class="sub">화면이 완성되는 흐름</h3>
+        <div class="pipe">
+          <div class="node"><b>말로 요청</b><span>브랜드 + 화면 설명</span></div><div class="arr">→</div>
+          <div class="node"><b>기획안 · 프로토타입</b><span>토큰·컴포넌트로 조립</span></div><div class="arr">→</div>
+          <div class="node"><b>검수</b><span>린트 + 실물 스크린샷 비교</span></div><div class="arr">→</div>
+          <div class="node"><b>완성안</b><span>개발 전달 기준, 자동 커밋</span></div>
+        </div>
       </div>
 
       <!-- ===== playground ===== -->
@@ -1231,7 +1323,7 @@ function tabIcon(t) {
   if (t === '컨시어지') return '<span class="tabAva avaImg"></span>';
   return '<span class="ic ic-' + (TABICONS[t] || 'home') + '"></span>';
 }
-const VIEWTITLES = { overview: '개요', play: '플레이그라운드', tokens: '디자인 토큰', components: '컴포넌트', docs: '설명서' };
+const VIEWTITLES = { overview: '개요', guide: '클로드 사용법', play: '플레이그라운드', tokens: '디자인 토큰', components: '컴포넌트', docs: '설명서' };
 
 function go(v) {
   document.querySelectorAll('.view').forEach(x => x.classList.toggle('on', x.dataset.v === v));
