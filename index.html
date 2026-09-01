@@ -194,11 +194,13 @@
   .pStatus { display: flex; justify-content: space-between; padding: 12px 20px 4px; font-size: 11px; font-weight: 700; color: #1a1a1a; }
   .pHead { padding: 8px 20px 10px; }
   .pBrandmark { font-family: "Noto Serif KR", serif; font-weight: 700; font-size: 13px; letter-spacing: .22em; color: #1a1a1a; }
-  .pBody { flex: 1; overflow: hidden; padding: 4px 20px 14px; display: flex; flex-direction: column; gap: 12px; }
+  .pBody { flex: 1; overflow: hidden; padding: 4px 0 14px; display: flex; flex-direction: column; gap: 12px; }
   .pscreen { display: none; flex-direction: column; gap: 12px; animation: vin .25s ease; }
   .pscreen.on { display: flex; flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; scrollbar-width: none; }
   .pscreen.on::-webkit-scrollbar { display: none; }
   .pscreen.on > * { flex-shrink: 0; }
+  .pscreen > * { margin-left: 20px; margin-right: 20px; }
+  .pscreen > .pBanner, .pscreen > .pDim, .pscreen > iframe { margin-left: 0; margin-right: 0; }
 
   .pcard { position: relative; background: #ffffff; border: var(--p-cardBorder, 1px solid #e6e2d8); border-radius: var(--p-rCard, 0px); box-shadow: var(--p-cardShadow, none); padding: 18px 16px 16px; overflow: hidden; }
   .pphoto { height: 190px; border-radius: calc(var(--p-rCard, 0px) * .6); background: linear-gradient(150deg, #e8e3d8, #cfc8b8 55%, #b7ad98); display: flex; align-items: flex-end; padding: 10px 12px; }
@@ -472,7 +474,7 @@
   .ptog.on::after { left: 21px; background: #211d15; }
 
   .clsOut { display: flex; align-items: center; gap: 14px; padding: 13px 32px; background: #191712; border-top: 1px solid #33302a; }
-  .clsOut code { flex: 1; font-family: ui-monospace, Menlo, monospace; font-size: 12.5px; color: #cfc7b2; overflow-x: auto; white-space: nowrap; }
+  .clsOut code { flex: 1; font-family: ui-monospace, Menlo, monospace; font-size: 12.5px; color: #cfc7b2; white-space: normal; word-break: break-all; min-width: 0; }
   .clsOut .cp { background: #f3e9d4; color: #211d15; border: 0; font-size: 12px; font-weight: 700; padding: 6px 14px; cursor: pointer; flex: none; }
 
   .dlgSlot { min-height: 40px; border: 1px dashed var(--p-acc, #9a8456); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 13px; color: var(--p-acc, #9a8456); opacity: .85; }
@@ -486,6 +488,12 @@
   .ctab.toneDark .it.on { color: #f5f5f5; }
   .ctab.toneDark .ind::before { background: #f5f5f5; }
 
+  /* ---- prepay flow embed ---- */
+  .prepayWrap { position: relative; background: #16140f; border: 1px solid var(--line); min-height: 640px; }
+  .prepayWrap iframe { position: relative; z-index: 1; display: block; width: 100%; height: calc(100vh - 210px); min-height: 640px; border: 0; }
+  .prepayNote { position: absolute; inset: 0; z-index: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #cfc7b2; font-size: 14.5px; text-align: center; padding: 24px; }
+  .prepayNote a { color: #f3e9d4; font-weight: 700; }
+
   /* ---- claude usage guide ---- */
   .steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
   @media (max-width: 860px) { .steps { grid-template-columns: 1fr; } }
@@ -493,7 +501,7 @@
   .stepc .sn { font-size: 12.5px; font-weight: 700; color: var(--gold-deep); letter-spacing: .06em; }
   .stepc b { display: block; font-size: 16.5px; margin: 4px 0 7px; }
   .stepc p { margin: 0; font-size: 14px; color: var(--ink-soft); line-height: 1.7; }
-  .cmd { display: block; background: #221f19; color: #e8e2d2; padding: 11px 15px; font-family: ui-monospace, Menlo, monospace; font-size: 12.5px; margin-top: 12px; overflow-x: auto; white-space: nowrap; }
+  .cmd { display: block; background: #221f19; color: #e8e2d2; padding: 11px 15px; font-family: ui-monospace, Menlo, monospace; font-size: 12.5px; margin-top: 12px; white-space: pre-wrap; word-break: break-all; line-height: 1.7; }
   .skillTbl { background: var(--surface); border: 1px solid var(--line); overflow-x: auto; }
   .skillTbl table { border-collapse: collapse; width: 100%; min-width: 560px; }
   .skillTbl td { padding: 12px 18px; border-top: 1px solid var(--line); font-size: 14px; color: var(--ink-soft); }
@@ -559,7 +567,7 @@
 
   /* phone popup screen */
   .pscreen[data-s="pop"].on { flex: 1; }
-  .pDim { flex: 1; margin: -4px -20px -14px; background: rgba(0,0,0,.55); display: flex; align-items: center; justify-content: center; padding: 22px; }
+  .pDim { flex: 1; margin: -4px 0 -14px; background: rgba(0,0,0,.55); display: flex; align-items: center; justify-content: center; padding: 22px; }
   .pDlg { width: 100%; background: #fff; border-radius: var(--p-rCard, 0px); padding: 26px 18px 16px; text-align: center; }
   .pDlg b { font-size: 15px; color: #1a1a1a; display: block; line-height: 1.45; }
   .pDlg p { margin: 8px 0 18px; font-size: 12.5px; color: #77716a; line-height: 1.65; }
@@ -567,12 +575,12 @@
   .pDlgBtns .pbtn { margin-top: 0; padding: 11px 0; font-size: 13px; }
 
   /* home screen (img/wemeet/screen_13 구성) */
-  .pTitleRow { display: flex; justify-content: space-between; align-items: center; padding: 6px 4px 4px; }
+  .pTitleRow { display: flex; justify-content: space-between; align-items: center; padding: 6px 0 4px; }
   .pTitleRow h1 { margin: 0; font-size: 26px; font-weight: 700; color: #1a1a1a; }
   .pToggle { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #77716a; }
   .pToggle i { width: 44px; height: 26px; border-radius: 999px; background: var(--p-acc, #FA345C); position: relative; display: inline-block; }
   .pToggle i::after { content: ""; position: absolute; top: 3px; right: 3px; width: 20px; height: 20px; border-radius: 999px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.2); }
-  .pBanner { margin: 0 -20px; background: var(--p-banner, #8D0000); color: #fff; font-size: 12.5px; font-weight: 600; padding: 9px 16px; font-variant-numeric: tabular-nums; }
+  .pBanner { margin: 0; background: var(--p-banner, #8D0000); color: #fff; font-size: 12.5px; font-weight: 600; padding: 9px 16px; font-variant-numeric: tabular-nums; }
   .pcard.homeCard { text-align: center; padding-top: 34px; }
   .pcard.homeCard .pquote { margin-top: 0; }
   .pquote { text-align: center; font-size: 17px; line-height: 1.55; color: #2a2620; }
@@ -658,6 +666,10 @@
     <button class="nav" data-v="play">
       <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1.5" y="1.5" width="13" height="13"/><path d="M6.5 5.5v5l4-2.5z" fill="currentColor" stroke="none"/></svg>
       플레이그라운드
+    </button>
+    <button class="nav" data-v="prepay">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1.5" y="3" width="13" height="10" rx="1"/><path d="M1.5 6.5h13M4.5 10h3"/></svg>
+      선결제 플로우
     </button>
     <button class="nav" data-v="tokens">
       <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="5" cy="5" r="3"/><circle cx="11" cy="11" r="3"/><path d="M11 2v3M2 11h3"/></svg>
@@ -892,6 +904,21 @@
             </div>
           </div>
         </div>
+        </div>
+        </div>
+      </div>
+
+      <!-- ===== prepay flow (완성안 임베드) ===== -->
+      <div class="view" data-v="prepay">
+        <h1 class="pgtitle">선결제 플로우</h1>
+        <p class="pgsub">완성안으로 승격된 만남보장 선결제 플로우(개발전달 단일 파일)를 그대로 임베드했습니다. 왼쪽에서 브랜드를 고르면 화면·토큰·카피가 통째로 그 브랜드로 전환됩니다. <a id="prepayOpen" href="https://wmatchgroup.github.io/wmg-playground/prepay.html#wemeet" target="_blank" rel="noopener">새 창에서 열기 ↗</a></p>
+        <div class="viewGrid">
+        <nav class="subSide" id="prepaySwitcher" aria-label="선결제 브랜드 선택"></nav>
+        <div class="viewMain">
+          <div class="prepayWrap">
+            <div class="prepayNote">화면이 비어 보이면 임베드가 차단된 환경입니다.<br><a id="prepayNoteLink" href="https://wmatchgroup.github.io/wmg-playground/prepay.html#wemeet" target="_blank" rel="noopener">새 창에서 열기 ↗</a></div>
+            <iframe id="prepayFrame" title="만남보장 선결제 플로우"></iframe>
+          </div>
         </div>
         </div>
       </div>
@@ -1305,6 +1332,7 @@ const play = $('play');
 /* asset/icon 실제 아이콘 매핑 (tabbar.css 스펙: 만남보장=place_filled · 호감교환=card · 보이스톡=call_filled · 약속=message_check · 내정보=user · 만남가능일=calendar) */
 const TABICONS = { '홈': 'home', '내정보': 'user', '매칭': 'mypage_checkMatch', '약속': 'message_check', '보이스톡': 'call_filled', '호감': 'card', '호감교환': 'card', '만남보장': 'place_filled', '만남가능일': 'calendar' };
 const LOGOS = { wemeet: 1, w_standard: 1, sky_drop: 1, itsmarry: 1, dolsings: 1 };
+const PREPAY_URL = 'https://wmatchgroup.github.io/wmg-playground/prepay.html';
 /* 홈 매칭 카드 스펙 줄 (img/wemeet/screen_13 형식: 지역 · 년생) */
 const SPEC = { wclub: '서울 · 92~95년생', w_highend: '서울 · 90~93년생', w_standard: '서울 · 94~97년생', highend_dolsing: '서울 · 86~89년생', dolsings: '경기 · 84~87년생', itsmarry: '서울 · 90~93년생', wemeet: '서울 · 94~97년생', sky_drop: '서울 · 96~99년생', startup_match: '서울 · 93~96년생' };
 /* 약속 확정 화면 (img/wemeet/screen_17 구성, 톤은 브랜드별) */
@@ -1323,12 +1351,16 @@ function tabIcon(t) {
   if (t === '컨시어지') return '<span class="tabAva avaImg"></span>';
   return '<span class="ic ic-' + (TABICONS[t] || 'home') + '"></span>';
 }
-const VIEWTITLES = { overview: '개요', guide: '클로드 사용법', play: '플레이그라운드', tokens: '디자인 토큰', components: '컴포넌트', docs: '설명서' };
+const VIEWTITLES = { overview: '개요', guide: '클로드 사용법', play: '플레이그라운드', prepay: '선결제 플로우', tokens: '디자인 토큰', components: '컴포넌트', docs: '설명서' };
 
 function go(v) {
   document.querySelectorAll('.view').forEach(x => x.classList.toggle('on', x.dataset.v === v));
   document.querySelectorAll('.nav').forEach(x => x.classList.toggle('on', x.dataset.v === v));
   $('crumbHere').textContent = VIEWTITLES[v] || v;
+  if (v === 'prepay') {
+    const pf = $('prepayFrame');
+    if (pf && !pf.src) pf.src = PREPAY_URL + '#' + ($('play').dataset.brand || 'wemeet');
+  }
   window.scrollTo({ top: 0 });
   try { localStorage.setItem('wmg-view', v); } catch (e) {}
 }
@@ -1348,6 +1380,7 @@ BRANDS.forEach(b => {
   $('switcher').appendChild(makeChip(b, 'bnav', () => select(b.id)));
   $('tokSwitcher').appendChild(makeChip(b, 'bnav', () => select(b.id)));
   $('compSwitcher').appendChild(makeChip(b, 'bnav', () => select(b.id)));
+  $('prepaySwitcher').appendChild(makeChip(b, 'bnav', () => select(b.id)));
 });
 document.querySelectorAll('.canchor').forEach(a => a.addEventListener('click', () => {
   const el = $(a.dataset.t);
@@ -1549,6 +1582,13 @@ function select(id) {
   cs.style.setProperty('--p-rTag', radVal(rad['--r-tag'] || '0'));
   curB = b; curBmap = bmap;
   renderAllComps();
+
+  /* 선결제 플로우 임베드 브랜드 동기화 */
+  const prepayUrl = PREPAY_URL + '#' + b.id;
+  $('prepayOpen').href = prepayUrl;
+  $('prepayNoteLink').href = prepayUrl;
+  const pf = $('prepayFrame');
+  if (pf.src) pf.src = prepayUrl;
 
   /* brand logo (asset/logo) in phone header + identity panel */
   const pl = $('pLogo'), il = $('iLogo');
