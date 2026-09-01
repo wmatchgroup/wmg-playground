@@ -728,7 +728,7 @@
         <div class="axis"><span>◀ 격식</span><span>캐주얼 ▶</span></div>
         <div class="clusters">
           <div class="cluster"><div class="cl-name">호텔 컨시어지 · 무채색 시크</div>
-            <ul><li><span class="dot" style="background:#1a1a1a; box-shadow: inset 0 0 0 2px #9a8456"></span>W 하이엔드</li><li><span class="dot" style="background:#9a8456"></span>W 클럽</li><li><span class="dot" style="background:#6b6b6b"></span>W 스탠다드</li></ul>
+            <ul><li><span class="dot" style="background:#1a1a1a"></span>W 하이엔드</li><li><span class="dot" style="background:#9a8456"></span>W 클럽</li><li><span class="dot" style="background:#6b6b6b"></span>W 스탠다드</li></ul>
             <div class="cl-desc">아이보리+골드 / 그레이+블랙 · 라운드 0</div></div>
           <div class="cluster"><div class="cl-name">격식 + 배려</div>
             <ul><li><span class="dot" style="background:#b09468"></span>W 하이엔드 돌싱</li><li><span class="dot" style="background:#8a6f4d"></span>돌싱즈</li></ul>
@@ -1354,7 +1354,7 @@ document.querySelectorAll('.nav').forEach(n => n.addEventListener('click', () =>
 $('goPlay').addEventListener('click', () => go('play'));
 
 /* brand chips: playground header + token header + sidebar */
-function dotStyle(b) { return 'background:' + b.dot + (b.id === 'w_highend' ? '; box-shadow: inset 0 0 0 2px #9a8456' : ''); }
+function dotStyle(b) { return 'background:' + b.dot; }
 function makeChip(b, cls, onclick) {
   const btn = document.createElement('button');
   btn.className = cls; btn.type = 'button'; btn.dataset.id = b.id;
