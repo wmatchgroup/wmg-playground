@@ -1322,6 +1322,10 @@ body[data-brand="startup_match"] {
 /* Typography 유틸리티 클래스 */
 
 
+</style><style id="embed-style">
+body.embedded{padding:0;display:block;min-height:auto}
+body.embedded .info,body.embedded #brandbar{display:none}
+body.embedded .phone{width:100%;height:100vh;border-radius:0;box-shadow:none}
 </style>
 
 <style>
@@ -2939,7 +2943,7 @@ body[data-brand="startup_match"] .mc-banner{background:var(--bg-statusBanner);}
   });
 
   window.addEventListener("hashchange", function(){ var b=(location.hash||"").replace("#",""); if (PAIRS.hasOwnProperty(b)) apply(b); });
-  if (window.self !== window.top && bar) bar.style.display = "none";
+  if (window.self !== window.top) { document.body.classList.add("embedded"); }
   var init = (location.hash || "").replace("#","");
   apply(PAIRS.hasOwnProperty(init) ? init : 'wemeet');
 })();

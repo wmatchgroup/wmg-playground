@@ -488,11 +488,20 @@
   .ctab.toneDark .it.on { color: #f5f5f5; }
   .ctab.toneDark .ind::before { background: #f5f5f5; }
 
-  /* ---- prepay flow embed ---- */
-  .prepayWrap { position: relative; background: #16140f; border: 1px solid var(--line); min-height: 640px; }
-  .prepayWrap iframe { position: relative; z-index: 1; display: block; width: 100%; height: calc(100vh - 210px); min-height: 640px; border: 0; }
-  .prepayNote { position: absolute; inset: 0; z-index: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #cfc7b2; font-size: 14.5px; text-align: center; padding: 24px; }
-  .prepayNote a { color: #f3e9d4; font-weight: 700; }
+  /* ---- 선결제 화면 (완성안 임베드, 폰 탭) ---- */
+  .pscreen[data-s="prepay"] { position: relative; }
+  .pscreen[data-s="prepay"].on { overflow: hidden; }
+  .pscreen[data-s="prepay"] iframe { position: absolute; inset: -4px 0 -14px 0; width: 100%; height: calc(100% + 18px); border: 0; z-index: 1; margin: 0; }
+  .pscreen[data-s="prepay"] .prepayNote { position: absolute; inset: 0; z-index: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; text-align: center; font-size: 13px; color: #77716a; padding: 24px; margin: 0; }
+  .prepayNote a { color: #1a1a1a; font-weight: 700; }
+
+  /* ---- 화면 품질 통일 (선결제 완성안 기준의 잉크·밀도) ---- */
+  .bub { font-size: 13px; color: #232323; line-height: 1.65; box-shadow: 0 2px 10px rgba(20,16,8,.05); }
+  .pbtn { font-size: 14px; letter-spacing: -.2px; padding: 13px 0; }
+  .pquote { color: #232323; letter-spacing: -.2px; }
+  .pTitleRow h1 { letter-spacing: -.5px; }
+  .pspecC { letter-spacing: -.2px; }
+  .cerBub, .pdBub { box-shadow: 0 6px 18px rgba(20,16,8,.10); }
 
   /* ---- claude usage guide ---- */
   .steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
@@ -667,10 +676,6 @@
       <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1.5" y="1.5" width="13" height="13"/><path d="M6.5 5.5v5l4-2.5z" fill="currentColor" stroke="none"/></svg>
       플레이그라운드
     </button>
-    <button class="nav" data-v="prepay">
-      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1.5" y="3" width="13" height="10" rx="1"/><path d="M1.5 6.5h13M4.5 10h3"/></svg>
-      선결제 플로우
-    </button>
     <button class="nav" data-v="tokens">
       <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="5" cy="5" r="3"/><circle cx="11" cy="11" r="3"/><path d="M11 2v3M2 11h3"/></svg>
       디자인 토큰
@@ -820,6 +825,7 @@
               <button class="stab" data-s="cer">약속 확정</button>
               <button class="stab" data-s="chat">채팅</button>
               <button class="stab" data-s="pop">팝업</button>
+              <button class="stab" data-s="prepay">선결제</button>
             </div>
             <div class="phoneBox"><div class="phoneScale">
             <div class="phone">
@@ -864,6 +870,10 @@
                     <div class="crow me"><div class="bub" id="bub3"></div></div>
                     <div class="cinput"><span class="fld">메시지 입력</span><button class="snd">↑</button></div>
                   </div>
+                  <div class="pscreen" data-s="prepay">
+                    <div class="prepayNote">보안 정책으로 임베드가 차단된 환경입니다.<br><a id="prepayOpen" href="https://wmatchgroup.github.io/wmg-playground/prepay.html#wemeet" target="_blank" rel="noopener">새 창에서 열기 ↗</a></div>
+                    <iframe id="prepayFrame" title="만남보장 선결제 플로우 (완성안)"></iframe>
+                  </div>
                   <div class="pscreen" data-s="pop">
                     <div class="pDim">
                       <div class="pDlg" id="pDlg">
@@ -904,21 +914,6 @@
             </div>
           </div>
         </div>
-        </div>
-        </div>
-      </div>
-
-      <!-- ===== prepay flow (완성안 임베드) ===== -->
-      <div class="view" data-v="prepay">
-        <h1 class="pgtitle">선결제 플로우</h1>
-        <p class="pgsub">완성안으로 승격된 만남보장 선결제 플로우(개발전달 단일 파일)를 그대로 임베드했습니다. 왼쪽에서 브랜드를 고르면 화면·토큰·카피가 통째로 그 브랜드로 전환됩니다. <a id="prepayOpen" href="https://wmatchgroup.github.io/wmg-playground/prepay.html#wemeet" target="_blank" rel="noopener">새 창에서 열기 ↗</a></p>
-        <div class="viewGrid">
-        <nav class="subSide" id="prepaySwitcher" aria-label="선결제 브랜드 선택"></nav>
-        <div class="viewMain">
-          <div class="prepayWrap">
-            <div class="prepayNote">화면이 비어 보이면 임베드가 차단된 환경입니다.<br><a id="prepayNoteLink" href="https://wmatchgroup.github.io/wmg-playground/prepay.html#wemeet" target="_blank" rel="noopener">새 창에서 열기 ↗</a></div>
-            <iframe id="prepayFrame" title="만남보장 선결제 플로우"></iframe>
-          </div>
         </div>
         </div>
       </div>
@@ -1351,16 +1346,12 @@ function tabIcon(t) {
   if (t === '컨시어지') return '<span class="tabAva avaImg"></span>';
   return '<span class="ic ic-' + (TABICONS[t] || 'home') + '"></span>';
 }
-const VIEWTITLES = { overview: '개요', guide: '클로드 사용법', play: '플레이그라운드', prepay: '선결제 플로우', tokens: '디자인 토큰', components: '컴포넌트', docs: '설명서' };
+const VIEWTITLES = { overview: '개요', guide: '클로드 사용법', play: '플레이그라운드', tokens: '디자인 토큰', components: '컴포넌트', docs: '설명서' };
 
 function go(v) {
   document.querySelectorAll('.view').forEach(x => x.classList.toggle('on', x.dataset.v === v));
   document.querySelectorAll('.nav').forEach(x => x.classList.toggle('on', x.dataset.v === v));
   $('crumbHere').textContent = VIEWTITLES[v] || v;
-  if (v === 'prepay') {
-    const pf = $('prepayFrame');
-    if (pf && !pf.src) pf.src = PREPAY_URL + '#' + ($('play').dataset.brand || 'wemeet');
-  }
   window.scrollTo({ top: 0 });
   try { localStorage.setItem('wmg-view', v); } catch (e) {}
 }
@@ -1380,7 +1371,6 @@ BRANDS.forEach(b => {
   $('switcher').appendChild(makeChip(b, 'bnav', () => select(b.id)));
   $('tokSwitcher').appendChild(makeChip(b, 'bnav', () => select(b.id)));
   $('compSwitcher').appendChild(makeChip(b, 'bnav', () => select(b.id)));
-  $('prepaySwitcher').appendChild(makeChip(b, 'bnav', () => select(b.id)));
 });
 document.querySelectorAll('.canchor').forEach(a => a.addEventListener('click', () => {
   const el = $(a.dataset.t);
@@ -1583,10 +1573,9 @@ function select(id) {
   curB = b; curBmap = bmap;
   renderAllComps();
 
-  /* 선결제 플로우 임베드 브랜드 동기화 */
+  /* 선결제 화면(완성안 임베드) 브랜드 동기화 */
   const prepayUrl = PREPAY_URL + '#' + b.id;
   $('prepayOpen').href = prepayUrl;
-  $('prepayNoteLink').href = prepayUrl;
   const pf = $('prepayFrame');
   if (pf.src) pf.src = prepayUrl;
 
@@ -1624,7 +1613,11 @@ document.querySelectorAll('.stab').forEach(t => {
   t.addEventListener('click', () => {
     document.querySelectorAll('.stab').forEach(x => x.classList.toggle('on', x === t));
     document.querySelectorAll('.pscreen').forEach(s => s.classList.toggle('on', s.dataset.s === t.dataset.s));
-    document.querySelector('.phoneScr').classList.toggle('noHead', t.dataset.s === 'match' || t.dataset.s === 'cer');
+    document.querySelector('.phoneScr').classList.toggle('noHead', t.dataset.s === 'match' || t.dataset.s === 'cer' || t.dataset.s === 'prepay');
+    if (t.dataset.s === 'prepay') {
+      const pf = $('prepayFrame');
+      if (pf && !pf.src) pf.src = PREPAY_URL + '#' + ($('play').dataset.brand || 'wemeet');
+    }
   });
 });
 
