@@ -1501,6 +1501,49 @@ body[data-tone="brand"] .tabBar .item.on { color: var(--tabBar-active-fg-brand);
 .tabBar .ind { height: 24px; display: flex; align-items: center; justify-content: center; }
 .tabBar .ind::before { content: ""; width: 134px; height: 5px; border-radius: 999px; background: var(--fg); }
 .ic { display: inline-block; width: 24px; height: 24px; background-color: currentColor; -webkit-mask-position: center; mask-position: center; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-size: contain; mask-size: contain; }
+
+/* ═══ 신규 시안 v2 — WMG_PLAYGROUND_REVIEW 「앱별 디자인 개선안」 1차: 홈 4종 ═══
+ * 적용: body[data-restyle="v2"] + 홈(data-screen="home")에 한정. 배치·크기·순서·사진·문구 불변.
+ * 색·라운드·테두리·그림자·상태 라벨 표현만 변경. 제안안이며 기존 확정 디자인을 덮어쓰지 않는다. */
+
+/* W클럽 — 따뜻한 호텔 라운지: 아이보리 면, 가는 골드 단선, 평평한 직선 카드 (r 0/0) */
+body[data-restyle="v2"][data-screen="home"][data-content-brand="wclub"] {
+  --bg: #F5F1E8; --bg-inset: #FFFEFA; --tabBar-bg: #F5F1E8;
+  --button-primary-bg: #765F33; --brand-fg: #9A8456;
+  --r-card: 0; --r-btn: 0; --r-box: 0;
+}
+body[data-restyle="v2"][data-screen="home"][data-content-brand="wclub"] .matchCard { border: 1px solid rgba(154,132,86,.45); box-shadow: none; }
+body[data-restyle="v2"][data-screen="home"][data-content-brand="wclub"] .bubble { box-shadow: none; }
+body[data-restyle="v2"][data-screen="home"][data-content-brand="wclub"] .matchTag .t { font-size: 11px; letter-spacing: .28em; }
+
+/* 레이디퍼스트 — 로즈 톤의 정중한 접객: 로즈 배경, 플럼·블랙 CTA, 부드러운 카드 (r 12/6) */
+body[data-restyle="v2"][data-screen="home"][data-content-brand="ladyfirst"] {
+  --tabBar-active-fg: #292124; --tabBar-active-fg-brand: #8C5D6B;
+  --bg: #F7F2EF; --bg-inset: #FFFCFA; --tabBar-bg: #F7F2EF;
+  --button-primary-bg: #292124; --brand-fg: #8C5D6B;
+  --r-card: 12px; --r-btn: 6px; --r-box: 10px;
+}
+body[data-restyle="v2"][data-screen="home"][data-content-brand="ladyfirst"] .matchCard { box-shadow: inset 0 0 0 1px rgba(140,93,107,.14), 0 4px 16px rgba(140,93,107,.10); } /* 보더 대신 inset — 박스 크기 불변 */
+body[data-restyle="v2"][data-screen="home"][data-content-brand="ladyfirst"] .matchTag .t { color: #8C5D6B; }
+
+/* 스카이드롭 — 코발트와 둥근 캠퍼스 클럽: 옅은 블루 배경, 흰 카드 20px, pill 버튼 */
+body[data-restyle="v2"][data-screen="home"][data-content-brand="sky_drop"] {
+  --tabBar-active-fg: #132C9E; --tabBar-active-fg-brand: #132C9E;
+  --bg: #EEF2FC; --bg-inset: #FFFFFF; --tabBar-bg: #FFFFFF;
+  --button-primary-bg: #132C9E; --brand-fg: #132C9E;
+  --r-card: 20px; --r-btn: 999px; --r-box: 14px;
+}
+body[data-restyle="v2"][data-screen="home"][data-content-brand="sky_drop"] .matchCard { border: 0; box-shadow: 0 4px 16px rgba(19,44,158,.08); }
+
+/* 스타트업매치 — 짙은 그린의 워크 커뮤니티: 옅은 그린 배경, 딥그린 CTA, 작은 라운드, 라임은 상태 강조 한 곳 */
+body[data-restyle="v2"][data-screen="home"][data-content-brand="startup_match"] {
+  --tabBar-active-fg: #133F35; --tabBar-active-fg-brand: #133F35;
+  --bg: #EFF5F3; --bg-inset: #FFFFFF; --tabBar-bg: #FFFFFF;
+  --button-primary-bg: #133F35; --brand-fg: #133F35;
+  --r-card: 8px; --r-btn: 6px; --r-box: 6px;
+}
+body[data-restyle="v2"][data-screen="home"][data-content-brand="startup_match"] .matchCard { box-shadow: inset 0 0 0 1px #DCE8E2, 0 2px 10px rgba(19,63,53,.06); } /* 보더 대신 inset — 박스 크기 불변 */
+body[data-restyle="v2"][data-screen="home"][data-content-brand="startup_match"] .matchTag .t { background: #BDEC64; color: #133F35; }
 </style>
 </head>
 <body data-brand="wemeet" data-tone="default" data-screen="home" data-gender="male">
@@ -1643,6 +1686,7 @@ body[data-tone="brand"] .tabBar .item.on { color: var(--tabBar-active-fg-brand);
     var c = CFG[b] || CFG[styleB] || CFG.wemeet;
     curBrand = b;
     document.body.dataset.brand = styleB;
+    document.body.dataset.contentBrand = b; // 신규 시안(v2) 선택자용 — 별칭과 무관한 실제 브랜드
     document.body.dataset.tone = c.tone;
     document.body.dataset.gender = gender;
     var five = c.tabs.length === 5;
@@ -1678,14 +1722,20 @@ body[data-tone="brand"] .tabBar .item.on { color: var(--tabBar-active-fg-brand);
   window.__applyBrand = apply;
   window.__showScreen = function (s) { document.body.dataset.screen = s; };
   window.__setGender = function (gd) { gender = (gd === 'female') ? 'female' : 'male'; apply(curBrand); };
-  window.addEventListener('hashchange', function () { var b = (location.hash || '').replace('#', ''); if (CFG[b]) apply(b); });
-  var init = (location.hash || '').replace('#', '');
-  apply(CFG[init] ? init : 'wemeet');
+  /* 신규 시안(v2) 전환 — 홈 4종 제안안. ''=현재 확정 디자인 */
+  window.__setRestyle = function (v) { if (v === 'v2') document.body.dataset.restyle = 'v2'; else delete document.body.dataset.restyle; };
+  /* 해시: #브랜드[.v2][.freeze] — freeze는 비교 캡처용 타이머 고정 */
+  var hp = (location.hash || '').replace('#', '').split('.');
+  window.__frozen = hp.indexOf('freeze') >= 0;
+  if (hp.indexOf('v2') >= 0) document.body.dataset.restyle = 'v2';
+  window.addEventListener('hashchange', function () { var b = (location.hash || '').replace('#', '').split('.')[0]; if (CFG[b]) apply(b); });
+  apply(CFG[hp[0]] ? hp[0] : 'wemeet');
 
   /* 자동수락 카운트다운 */
   var left = 47 * 3600 + 59 * 60 + 59;
   var el = document.getElementById('timer');
   setInterval(function () {
+    if (window.__frozen) return; /* 비교 캡처: 타이머 고정 */
     left = Math.max(0, left - 1);
     var h = Math.floor(left / 3600), m = Math.floor(left % 3600 / 60), s = left % 60;
     el.textContent = h + '시간 ' + String(m).padStart(2, '0') + '분 ' + String(s).padStart(2, '0') + '초';
