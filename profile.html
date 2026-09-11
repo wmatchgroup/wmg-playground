@@ -9,6 +9,451 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
+/* ═══ 인라인: button.css · icon.css(베이스+사용 아이콘 data URI) · header.css — 배포 저장소에 design-system이 없어 상대경로 link 대신 내장 ═══ */
+/* ============================================================
+ * Button — W-MatchGroup 공통 컴포넌트
+ *
+ * 컴포넌트 5종 (Figma: primaryButton / secondaryButton / tertiaryButton
+ *              / negativeButton / onButton)
+ *
+ * 속성 (Figma 프로퍼티 → 클래스 매핑):
+ *   variant   filled(기본) | outlined      → .btn--outlined
+ *   size      2xlarge(기본) | xlarge | large | medium | small | xsmall
+ *             → .btn--2xlarge … .btn--xsmall
+ *   rounded   none(기본) | small | full    → .btn--rounded-small | .btn--rounded-full
+ *   state     default | pressed | disabled | focus
+ *             → :active·.is-pressed / :disabled·.is-disabled / :focus-visible·.is-focus
+ *   isOverlay false(기본) | true           → .btn--overlay  (이미지/컬러 배경 위)
+ *   prefix    false | true                 → .btn__icon.btn__icon--prefix
+ *   surffix   false | true                 → .btn__icon.btn__icon--surffix
+ *   isLoading false | true                 → .is-loading
+ *   label     텍스트                        → .btn__label
+ *
+ * 역할 (role):
+ *   .btn--primary    한 페이지/흐름에서 가장 중요한 핵심 액션 (1개만)
+ *   .btn--secondary  Primary의 보조. 사용자가 선택할 수 있는 다른 행동
+ *   .btn--tertiary   중요도 최하 — 취소, 해제, 건너뛰기 등
+ *   .btn--negative   삭제·변경 등 부정적 액션. ⚠ outlined variant만 지원
+ *   .btn--on         컬러/이미지 배경 위 전용. ⚠ filled variant만 지원
+ *
+ * Content Guide: 어떤 동작이 일어날지 예측 가능한, 행동을 장려하는 동사 사용.
+ *
+ * 사이즈 스펙 (2026-08-14 확정):
+ *   size     높이  좌우패딩  아이콘쪽 패딩   폰트                    간격
+ *   2xlarge  56    16       8             text.medium-xl (16/500)  2
+ *   xlarge   48    16       8             text.medium-xl (16/500)  2
+ *   large    40    16       8             text.medium-m  (14/500)  2
+ *   medium   32    10       6             text.medium-m  (14/500)  2
+ *   small    28    8        4             text.medium-xs (12/500)  2
+ *   xsmall   28    6        4             text.semibold-3xs (10/600) 2
+ *   rounded-small 4px · focus 아웃라인 1px · 스피너: 레이블 대체, 두께 2px
+ *   ※ 아이콘쪽 패딩: prefix가 있으면 좌측, surffix가 있으면 우측에 적용
+ * ============================================================ */
+
+/* ── 베이스 ── */
+.btn {
+  /* 사이즈 스케일 기본값 = 2xlarge (Figma 기본) */
+  --_h: 56px;
+  --_px: var(--spacing-dimension-16);          /* 좌우 패딩 */
+  --_pxi: var(--spacing-dimension-8);          /* 아이콘 쪽 패딩 */
+  --_fs: var(--text-medium-xl-fontSize);       /* 16px */
+  --_fw: var(--text-medium-xl-fontWeight);     /* 500 */
+  --_icon: var(--button-iconSize-xxl);         /* 24px */
+  --_gap: var(--spacing-dimension-2);          /* 2px */
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--_gap);
+  height: var(--_h);
+  padding: 0 var(--_px);
+  border: var(--borderWidth-1) solid transparent;
+  border-radius: 0;                            /* rounded: none (기본) */
+  font-family: var(--text-m-fontFamily, Pretendard), "Pretendard Variable", -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: var(--_fs);
+  font-weight: var(--_fw);
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  box-sizing: border-box;
+  transition: background-color .12s, color .12s, border-color .12s, opacity .12s;
+}
+
+/* ── 사이즈 스케일 (Figma 확정 수치) ── */
+.btn--2xlarge { --_h:56px; --_px:var(--spacing-dimension-16); --_pxi:var(--spacing-dimension-8); --_fs:var(--text-medium-xl-fontSize);   --_fw:var(--text-medium-xl-fontWeight);   --_icon:var(--button-iconSize-xxl); }
+.btn--xlarge  { --_h:48px; --_px:var(--spacing-dimension-16); --_pxi:var(--spacing-dimension-8); --_fs:var(--text-medium-xl-fontSize);   --_fw:var(--text-medium-xl-fontWeight);   --_icon:var(--button-iconSize-xl); }
+.btn--large   { --_h:40px; --_px:var(--spacing-dimension-16); --_pxi:var(--spacing-dimension-8); --_fs:var(--text-medium-m-fontSize);    --_fw:var(--text-medium-m-fontWeight);    --_icon:var(--button-iconSize-l); }
+.btn--medium  { --_h:32px; --_px:var(--spacing-dimension-10); --_pxi:var(--spacing-dimension-6); --_fs:var(--text-medium-m-fontSize);    --_fw:var(--text-medium-m-fontWeight);    --_icon:var(--button-iconSize-m); }
+.btn--small   { --_h:28px; --_px:var(--spacing-dimension-8);  --_pxi:var(--spacing-dimension-4); --_fs:var(--text-medium-xs-fontSize);   --_fw:var(--text-medium-xs-fontWeight);   --_icon:var(--button-iconSize-s); }
+.btn--xsmall  { --_h:28px; --_px:var(--spacing-dimension-6);  --_pxi:var(--spacing-dimension-4); --_fs:var(--text-semibold-3xs-fontSize); --_fw:var(--text-semibold-3xs-fontWeight); --_icon:var(--button-iconSize-xs); }
+
+/* 아이콘이 있는 쪽 패딩 축소 */
+.btn:has(.btn__icon--prefix),  .btn.has-prefix  { padding-left: var(--_pxi); }
+.btn:has(.btn__icon--surffix), .btn.has-surffix { padding-right: var(--_pxi); }
+
+/* ── rounded ── */
+.btn--rounded-small { border-radius: var(--rounded-xs); }  /* 4px (rounded.xs) */
+.btn--rounded-full  { border-radius: var(--rounded-full); }
+
+/* ── 아이콘 · 레이블 ── */
+.btn__icon { width: var(--_icon); height: var(--_icon); flex-shrink: 0; }
+.btn__icon svg, .btn__icon img { width: 100%; height: 100%; display: block; }
+.btn__label { display: inline-block; }
+
+/* ============================================================
+ * 역할 × variant × state 색상 (전부 토큰)
+ * ============================================================ */
+
+/* ── primary ── */
+.btn--primary { background: var(--button-primary-bg); color: var(--button-primary-fg); }
+.btn--primary:active, .btn--primary.is-pressed { background: var(--button-primary-bg-pressed); color: var(--button-primary-fg-pressed); }
+.btn--primary:disabled, .btn--primary.is-disabled { background: var(--button-primary-bg-disabled); color: var(--button-primary-fg-disabled); }
+.btn--primary.btn--outlined { background: var(--button-primary-bgOutlined); color: var(--button-primary-fgOutlined); border-color: var(--button-primary-border); }
+.btn--primary.btn--outlined:active, .btn--primary.btn--outlined.is-pressed { background: var(--button-primary-bgOutlined-pressed); color: var(--button-primary-fgOutlined-pressed); }
+.btn--primary.btn--outlined:disabled, .btn--primary.btn--outlined.is-disabled { background: var(--button-primary-bgOutlined-disabled); color: var(--button-primary-fgOutlined-disabled); border-color: var(--button-primary-border-disabled); }
+.btn--primary.btn--overlay { background: var(--button-primary-bgOverlay); color: var(--button-primary-fgOverlay); border-color: var(--button-primary-borderOverlay); }
+.btn--primary.btn--overlay:active, .btn--primary.btn--overlay.is-pressed { background: var(--button-primary-bgOverlay-pressed); color: var(--button-primary-fgOverlay-pressed); border-color: var(--button-primary-borderOverlay-pressed); }
+
+/* ── secondary ── */
+.btn--secondary { background: var(--button-secondary-bg); color: var(--button-secondary-fg); }
+.btn--secondary:active, .btn--secondary.is-pressed { background: var(--button-secondary-bg-pressed); color: var(--button-secondary-fg-pressed); }
+.btn--secondary:disabled, .btn--secondary.is-disabled { background: var(--button-secondary-bg-disabled); color: var(--button-secondary-fg-disabled); }
+.btn--secondary.btn--outlined { background: var(--button-secondary-bgOutlined); color: var(--button-secondary-fgOutlined); border-color: var(--button-secondary-border); }
+.btn--secondary.btn--outlined:active, .btn--secondary.btn--outlined.is-pressed { background: var(--button-secondary-bgOutlined-pressed); color: var(--button-secondary-fgOutlined-pressed); }
+.btn--secondary.btn--outlined:disabled, .btn--secondary.btn--outlined.is-disabled { background: var(--button-secondary-bgOutlined-disabled); color: var(--button-secondary-fgOutlined-disabled); border-color: var(--button-secondary-border-disabled); }
+.btn--secondary.btn--overlay { background: var(--button-secondary-bgOverlay); color: var(--button-secondary-fgOverlay); border-color: var(--button-secondary-borderOverlay); }
+.btn--secondary.btn--overlay:active, .btn--secondary.btn--overlay.is-pressed { background: var(--button-secondary-bgOverlay-pressed); color: var(--button-secondary-fgOverlay-pressed); border-color: var(--button-secondary-borderOverlay-pressed); }
+
+/* ── tertiary ── */
+.btn--tertiary { background: var(--button-tertiary-bg); color: var(--button-tertiary-fg); }
+.btn--tertiary:active, .btn--tertiary.is-pressed { background: var(--button-tertiary-bg-pressed); color: var(--button-tertiary-fg-pressed); }
+.btn--tertiary:disabled, .btn--tertiary.is-disabled { background: var(--button-tertiary-bg-disabled); color: var(--button-tertiary-fg-disabled); }
+.btn--tertiary.btn--outlined { background: var(--button-tertiary-bgOutlined); color: var(--button-tertiary-fgOutlined); border-color: var(--button-tertiary-border); }
+.btn--tertiary.btn--outlined:active, .btn--tertiary.btn--outlined.is-pressed { background: var(--button-tertiary-bgOutlined-pressed); color: var(--button-tertiary-fgOutlined-pressed); }
+.btn--tertiary.btn--outlined:disabled, .btn--tertiary.btn--outlined.is-disabled { background: var(--button-tertiary-bgOutlined-disabled); color: var(--button-tertiary-fgOutlined-disabled); border-color: var(--button-tertiary-border-disabled); }
+/* tertiary overlay는 fgOverlay 토큰만 존재 → 투명 배경 + 텍스트 컬러만 */
+.btn--tertiary.btn--overlay { background: transparent; border-color: transparent; color: var(--button-tertiary-fgOverlay); }
+.btn--tertiary.btn--overlay:active, .btn--tertiary.btn--overlay.is-pressed { color: var(--button-tertiary-fgOverlay-pressed); }
+
+/* ── negative (⚠ outlined 전용) ── */
+.btn--negative { background: var(--button-negative-bgOutlined); color: var(--button-negative-fgOutlined); border-color: var(--button-negative-border); }
+.btn--negative:active, .btn--negative.is-pressed { background: var(--button-negative-bgOutlined-pressed); color: var(--button-negative-fgOutlined-pressed); }
+.btn--negative:disabled, .btn--negative.is-disabled { background: var(--button-negative-bgOutlined-disabled); color: var(--button-negative-fgOutlined-disabled); border-color: var(--button-negative-border-disabled); }
+
+/* ── naver / catchTable (예약 버튼, filled 전용) ── */
+.btn--naver { background: var(--button-naver-bg); color: var(--button-naver-fg); }
+.btn--catchTable { background: var(--button-catchTable-bg); color: var(--button-catchTable-fg); }
+
+/* ── on (컬러/이미지 배경 위 전용, ⚠ filled 전용) ── */
+.btn--on { background: var(--button-on-bg); color: var(--button-on-fg); }
+.btn--on:active, .btn--on.is-pressed { background: var(--button-on-bg-pressed); color: var(--button-on-fg-pressed); }
+.btn--on:disabled, .btn--on.is-disabled { background: var(--button-on-bg-disabled); color: var(--button-on-fg-disabled); }
+/* on overlay는 fgOverlay 토큰만 존재 → 투명 배경 + 텍스트 컬러만 */
+.btn--on.btn--overlay { background: transparent; color: var(--button-on-fgOverlay); }
+.btn--on.btn--overlay:active, .btn--on.btn--overlay.is-pressed { color: var(--button-on-fgOverlay-pressed); }
+
+/* ── 공통 상태 ── */
+.btn:disabled, .btn.is-disabled { cursor: not-allowed; }
+.btn:focus-visible, .btn.is-focus {
+  outline: 1px solid var(--focus-outline);
+  outline-offset: 2px;
+}
+
+/* ── isLoading (스피너가 레이블 대체, 두께 2px) ── */
+.btn.is-loading { pointer-events: none; position: relative; }
+.btn.is-loading .btn__label, .btn.is-loading .btn__icon { visibility: hidden; }
+.btn.is-loading::after {
+  content: "";
+  position: absolute;
+  width: calc(var(--_icon) * 0.83);
+  height: calc(var(--_icon) * 0.83);
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: var(--rounded-full);
+  animation: btn-spin .8s linear infinite;
+}
+@keyframes btn-spin { to { transform: rotate(360deg); } }
+
+/* 자동 생성 파일 (design-system/build-tokens.js) — asset/icon/*.svg 마스크 아이콘 */
+/* 사용: <span class="ic ic--check"></span> — 색은 currentColor(부모 텍스트 색)를 따름 */
+.ic {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  background-color: currentColor;
+  -webkit-mask: var(--ic) center / contain no-repeat;
+  mask: var(--ic) center / contain no-repeat;
+}
+/* Button 컴포넌트 조합 시 사이즈는 버튼 스케일을 따름 */
+.btn__icon.ic { width: var(--_icon); height: var(--_icon); }
+
+
+.ic--check_circle_filled{--ic:url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_101_123%29%22%3E%20%3Cpath%20d%3D%22M12%202C6.48%202%202%206.48%202%2012C2%2017.52%206.48%2022%2012%2022C17.52%2022%2022%2017.52%2022%2012C22%206.48%2017.52%202%2012%202ZM9.29%2016.29L5.7%2012.7C5.31%2012.31%205.31%2011.68%205.7%2011.29C6.09%2010.9%206.72%2010.9%207.11%2011.29L10%2014.17L15.88%208.29C16.27%207.9%2016.9%207.9%2017.29%208.29C17.68%208.68%2017.68%209.31%2017.29%209.7L10.7%2016.29C10.32%2016.68%209.68%2016.68%209.29%2016.29Z%22%20fill%3D%22black%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_101_123%22%3E%20%3Crect%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E")}
+.ic--check_verified{--ic:url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_31_221%29%22%3E%20%3Cpath%20d%3D%22M23%2012L20.56%209.21L20.9%205.52L17.29%204.7L15.4%201.5L12%202.96L8.6%201.5L6.71%204.69L3.1%205.5L3.44%209.2L1%2012L3.44%2014.79L3.1%2018.49L6.71%2019.31L8.6%2022.5L12%2021.03L15.4%2022.49L17.29%2019.3L20.9%2018.48L20.56%2014.79L23%2012ZM9.38%2016.01L7%2013.61C6.61%2013.22%206.61%2012.59%207%2012.2L7.07%2012.13C7.46%2011.74%208.1%2011.74%208.49%2012.13L10.1%2013.75L15.25%208.59C15.64%208.2%2016.28%208.2%2016.67%208.59L16.74%208.66C17.13%209.05%2017.13%209.68%2016.74%2010.07L10.82%2016.01C10.41%2016.4%209.78%2016.4%209.38%2016.01Z%22%20fill%3D%22black%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_31_221%22%3E%20%3Crect%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E")}
+.ic--chevron_left_large{--ic:url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_22_101%29%22%3E%20%3Cpath%20d%3D%22M16.62%202.99C16.13%202.5%2015.34%202.5%2014.85%202.99L6.54%2011.3C6.15%2011.69%206.15%2012.32%206.54%2012.71L14.85%2021.02C15.34%2021.51%2016.13%2021.51%2016.62%2021.02C17.11%2020.53%2017.11%2019.74%2016.62%2019.25L9.38%2012L16.63%204.75C17.11%204.27%2017.11%203.47%2016.62%202.99Z%22%20fill%3D%22black%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_22_101%22%3E%20%3Crect%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E")}
+.ic--chevron_right{--ic:url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_22_98%29%22%3E%20%3Cpath%20d%3D%22M9.29%206.71002C8.9%207.10002%208.9%207.73002%209.29%208.12002L13.17%2012L9.29%2015.88C8.9%2016.27%208.9%2016.9%209.29%2017.29C9.68%2017.68%2010.31%2017.68%2010.7%2017.29L15.29%2012.7C15.68%2012.31%2015.68%2011.68%2015.29%2011.29L10.7%206.70002C10.32%206.32002%209.68%206.32002%209.29%206.71002Z%22%20fill%3D%22black%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_22_98%22%3E%20%3Crect%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E")}
+.ic--arrow_left{--ic:url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_23_111%29%22%3E%20%3Cpath%20d%3D%22M19%2011H7.83001L12.71%206.12C13.1%205.73%2013.1%205.09%2012.71%204.7C12.32%204.31%2011.69%204.31%2011.3%204.7L4.71001%2011.29C4.32001%2011.68%204.32001%2012.31%204.71001%2012.7L11.3%2019.29C11.69%2019.68%2012.32%2019.68%2012.71%2019.29C13.1%2018.9%2013.1%2018.27%2012.71%2017.88L7.83001%2013H19C19.55%2013%2020%2012.55%2020%2012C20%2011.45%2019.55%2011%2019%2011Z%22%20fill%3D%22black%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_23_111%22%3E%20%3Crect%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E")}
+.ic--more_vertical{--ic:url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Cg%20clip-path%3D%22url%28%23clip0_22_110%29%22%3E%20%3Cpath%20d%3D%22M12%2010C10.9%2010%2010%2010.9%2010%2012C10%2013.1%2010.9%2014%2012%2014C13.1%2014%2014%2013.1%2014%2012C14%2010.9%2013.1%2010%2012%2010Z%22%20fill%3D%22black%22%2F%3E%20%3Cpath%20d%3D%22M14%205C14%206.1%2013.1%207%2012%207C10.9%207%2010%206.1%2010%205C10%203.9%2010.9%203%2012%203C13.1%203%2014%203.9%2014%205Z%22%20fill%3D%22black%22%2F%3E%20%3Cpath%20d%3D%22M10%2019C10%2017.9%2010.9%2017%2012%2017C13.1%2017%2014%2017.9%2014%2019C14%2020.1%2013.1%2021%2012%2021C10.9%2021%2010%2020.1%2010%2019Z%22%20fill%3D%22black%22%2F%3E%20%3C%2Fg%3E%20%3Cdefs%3E%20%3CclipPath%20id%3D%22clip0_22_110%22%3E%20%3Crect%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22white%22%2F%3E%20%3C%2FclipPath%3E%20%3C%2Fdefs%3E%20%3C%2Fsvg%3E")}
+.header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 60px;
+  padding: 0 var(--spacing-dimension-20);
+  background: var(--navigationBar-filled-bg);
+  color: var(--fg);
+  font-family: var(--text-m-fontFamily, Pretendard), "Pretendard Variable", -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+}
+.header *, .header *::before, .header *::after { box-sizing: inherit; }
+
+/* ── surface ── */
+.header--filled      { background: var(--navigationBar-filled-bg); }
+.header--brandFilled { background: var(--navigationBar-brandFilled-bg); }
+.header--transparent { background: transparent; color: var(--fg-inverse, #fff); }
+.header--transparent.header--accent .header__title,
+.header--transparent.header--accent .header__textBtn,
+.header--transparent.header--accent .header__credit { color: var(--navigationBar-transparent-fg-accent); }
+
+/* ── prefix / suffix 영역 ── */
+.header__prefix,
+.header__suffix {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-dimension-8);
+  flex: none;
+  min-width: var(--spacing-dimension-24);   /* 비어 있어도 제목 중앙 정렬 유지 */
+}
+.header__suffix { margin-left: auto; }
+
+/* 아이콘 버튼 24 (back · close · icon) */
+.header__iconBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--spacing-dimension-24);
+  height: var(--spacing-dimension-24);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  font-family: inherit;
+}
+.header__iconBtn .ic { width: var(--spacing-dimension-24); height: var(--spacing-dimension-24); }
+/* *WithBg: 투명 배경 위에서 아이콘 뒤에 반투명 원 */
+.header__iconBtn--withBg {
+  width: var(--spacing-dimension-32);
+  height: var(--spacing-dimension-32);
+  border-radius: var(--rounded-full);
+  background: var(--navigationBar-icon-bg);
+  color: var(--fg-inverse, #fff);
+}
+.header__iconBtn--withBg .ic { width: var(--spacing-dimension-20); height: var(--spacing-dimension-20); }
+
+/* ── 제목 ── */
+/* 제목은 absolute로 띄워 prefix/suffix 폭과 무관하게 항상 정중앙 (2026-09-11 확정).
+ * max-width = 양쪽에 가장 넓은 suffix(button 64) + 패딩 20 + 간격 8 을 비워 둔 값 */
+.header__title {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  max-width: calc(100% - 184px);
+  margin: 0;
+  text-align: center;
+  pointer-events: none;
+  font-size: var(--title-semibold-2xs-fontSize, 16px);
+  font-weight: var(--title-semibold-2xs-fontWeight, 600);
+  line-height: var(--title-semibold-2xs-lineHeight, 140%);
+  color: inherit;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── emphasis: 큰 제목 좌측 ── */
+.header--emphasis { min-height: 76px; }
+.header--emphasis .header__prefix { display: none; }
+.header--emphasis .header__title {
+  position: static;
+  transform: none;
+  flex: 1;
+  min-width: 0;
+  max-width: none;
+  pointer-events: auto;
+  text-align: left;
+  font-size: var(--title-bold-l-fontSize, 26px);
+  font-weight: var(--title-bold-l-fontWeight, 700);
+  line-height: var(--title-bold-l-lineHeight, 140%);
+  letter-spacing: -.5px;
+}
+
+/* ── suffix 변형 ── */
+.header__textBtn {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: var(--text-medium-m-fontSize, 14px);
+  font-weight: var(--text-medium-m-fontWeight, 500);
+  line-height: var(--text-medium-m-lineHeight, 140%);
+  color: var(--brand-fg);
+}
+.header--transparent .header__textBtn { color: inherit; }
+
+.header__credit {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-dimension-4);
+  height: 28px;
+  padding: 0 var(--spacing-dimension-10) 0 var(--spacing-dimension-8);
+  border-radius: var(--rounded-full);
+  background: var(--bg-inset);
+  color: var(--brand-fg);
+  font-size: var(--text-medium-m-fontSize, 14px);
+  font-weight: var(--text-semibold-m-fontWeight, 600);
+  line-height: 1;
+}
+.header__credit .ic { width: var(--spacing-dimension-16); height: var(--spacing-dimension-16); }
+.header--transparent .header__credit { background: transparent; color: inherit; padding: 0; }
+
+.header__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-dimension-8);
+  font-size: var(--text-medium-m-fontSize, 14px);
+  font-weight: var(--text-medium-m-fontWeight, 500);
+  color: var(--fg-low);
+}
+.header__switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex: none;
+  border: 0;
+  padding: 0;
+  border-radius: var(--rounded-full);
+  background: var(--color-neutral-100);
+  cursor: pointer;
+}
+.header__switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--rounded-full);
+  background: var(--bg-inset, #fff);
+  transition: left .15s ease;
+}
+.header__switch.is-on { background: var(--brand-bg); }
+.header__switch.is-on::after { left: 22px; }
+
+/* suffix 안의 button.css small 버튼: 아이콘+레이블 */
+.header__suffix .btn { flex: none; }
+
+/* ── progressBar ── */
+.header--progressBar {
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0;
+  min-height: 0;
+}
+.header--progressBar .header__bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 60px;
+  padding: 0 var(--spacing-dimension-20);
+}
+.header__progress {
+  position: relative;
+  height: 56px;                 /* 툴팁(위) + 트랙·아바타 행 */
+  --progress: 0%;
+}
+.header__track {
+  position: absolute;
+  left: 0; right: 0;
+  bottom: 10px;
+  height: 4px;
+  border-radius: var(--rounded-full);
+  background: var(--color-neutral-100);
+  overflow: hidden;
+}
+.header__track i {
+  display: block;
+  width: var(--progress);
+  height: 100%;
+  border-radius: inherit;
+  background: var(--brand-bg);
+}
+.header__marker {
+  position: absolute;
+  left: var(--progress);
+  bottom: -2px;
+  transform: translateX(-14px);   /* 아바타 중심을 진행 끝점에 */
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding-right: var(--spacing-dimension-8);
+  border-radius: var(--rounded-full);
+  background: var(--bg-inset, #fff);
+  color: var(--fg);
+  font-size: var(--text-semibold-xs-fontSize, 12px);
+  font-weight: var(--text-semibold-xs-fontWeight, 600);
+  white-space: nowrap;
+}
+.header__markerAvatar {
+  width: 28px; height: 28px;
+  border-radius: var(--rounded-full);
+  object-fit: cover;
+  margin-right: var(--spacing-dimension-4);
+}
+.header__tip {
+  position: absolute;
+  top: 0;
+  /* 아바타(진행 끝점)를 따라가되 좌우 16 안쪽에 머문다 (툴팁 폭 ≈ 250 가정) */
+  left: clamp(var(--spacing-dimension-16), calc(var(--progress) - 14px), calc(100% - var(--spacing-dimension-16) - 250px));
+  display: inline-block;
+  padding: var(--spacing-dimension-6) var(--spacing-dimension-12);
+  border-radius: var(--rounded-m);
+  background: var(--color-brand-400);
+  color: var(--fg-inverse, #fff);
+  font-size: var(--text-medium-xs-fontSize, 12px);
+  font-weight: var(--text-medium-xs-fontWeight, 500);
+  line-height: 140%;
+  white-space: nowrap;
+}
+.header__tip::after {              /* 아바타 쪽 꼬리 */
+  content: "";
+  position: absolute;
+  left: var(--spacing-dimension-12);
+  bottom: -5px;
+  width: 10px; height: 5px;
+  background: inherit;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+/* 툴팁을 행 아래에 두는 변형 (titleType=none · 트랙이 내비 행 중앙을 지날 때) */
+.header--progressBar.header--tipBottom .header__progress { order: 2; height: 68px; }
+.header--progressBar.header--tipBottom .header__track { top: 14px; bottom: auto; }
+.header--progressBar.header--tipBottom .header__marker { top: 2px; bottom: auto; }
+.header--progressBar.header--tipBottom .header__tip { top: auto; bottom: 0; }
+.header--progressBar.header--tipBottom .header__tip::after { bottom: auto; top: -5px; clip-path: polygon(50% 0, 0 100%, 100% 100%); }
+
+.header__title.brand { font-size: var(--text-bold-l-fontSize); font-weight: var(--fontWeight-extrabold-800); letter-spacing: .24em; }
+.header__title.brand b { color: var(--brand-fg); }
+</style>
+<style>
 /* 글로벌 공통 (전 브랜드 동일) — 자동 생성 파일 (design-system/build-tokens.js) */
 /* 소스: tokens/global/ + tokens/global/ */
 :root {
@@ -1628,8 +2073,8 @@ body.embed .device.on { display: block; }
 body.embed .phone { width: 100%; height: 100vh; border: none; border-radius: 0; box-shadow: none; }
 body.embed .step, body.embed .match-card { display: none; } /* 앱에는 설계 단계 라벨·탐색 카드 없이 상세 프로필부터 */
 </style>
-<link rel="stylesheet" href="../../design-system/components/global/button.css">
-<link rel="stylesheet" href="../../design-system/components/global/icon.css">
+
+
 <style>
   /* 모든 색·서체·간격·라운드는 design-system 토큰만 사용 (wclub-ux-rules.md) */
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -1692,22 +2137,10 @@ body.embed .step, body.embed .match-card { display: none; } /* 앱에는 설계 
   .statusbar {
     display:flex; justify-content:space-between; align-items:center;
     padding:var(--spacing-dimension-16) var(--spacing-dimension-24) var(--spacing-dimension-4) var(--spacing-dimension-28);
-    background:var(--bg);
+    background:var(--navigationBar-brandFilled-bg, var(--bg)); /* 헤더와 같은 surface */
   }
   .statusbar .time { font-size:var(--text-semibold-l-fontSize); font-weight:var(--text-semibold-l-fontWeight); }
   .statusbar svg { display:block; }
-  .navbar {
-    display:flex; align-items:center; justify-content:space-between;
-    padding:var(--spacing-dimension-10) var(--spacing-dimension-20) var(--spacing-dimension-12);
-    background:var(--bg);
-  }
-  .navbar .back { width:var(--size-icon-24); height:var(--size-icon-24); display:flex; align-items:center; }
-  .navbar .brand {
-    font-size:var(--text-bold-l-fontSize); font-weight:var(--fontWeight-extrabold-800);
-    letter-spacing:.24em; color:var(--fg); padding-left:var(--spacing-dimension-4);
-  }
-  .navbar .brand b { color:var(--brand-fg); }
-  .navbar .more { width:var(--size-icon-24); text-align:right; color:var(--fg-lower); font-weight:var(--fontWeight-extrabold-800); }
 
   /* 단계 라벨 */
   .step {
@@ -2025,11 +2458,11 @@ body.embed .step, body.embed .match-card { display: none; } /* 앱에는 설계 
           <span class="time">9:41</span>
           <svg width="62" height="13" viewBox="0 0 62 13" fill="none"><rect x="0" y="4" width="3" height="8" rx="1" fill="var(--fg)"/><rect x="5" y="2.5" width="3" height="9.5" rx="1" fill="var(--fg)"/><rect x="10" y="1" width="3" height="11" rx="1" fill="var(--fg)"/><rect x="15" y="0" width="3" height="12" rx="1" fill="var(--fg)"/><path d="M28 3.5C30.6 1.4 34.4 1.4 37 3.5M29.8 6.2c1.7-1.4 3.7-1.4 5.4 0M31.6 8.9c.8-.7 1.9-.7 2.8 0" stroke="var(--fg)" stroke-width="1.5" stroke-linecap="round"/><rect x="44" y="1.5" width="15" height="9.5" rx="2.4" stroke="var(--fg)" stroke-width="1"/><rect x="45.5" y="3" width="10.5" height="6.5" rx="1.2" fill="var(--fg)"/><path d="M60.5 4.5v3.5c.9-.3 1.5-1 1.5-1.8s-.6-1.4-1.5-1.7z" fill="var(--fg)"/></svg>
         </div>
-        <div class="navbar">
-          <div class="back"><span class="ic ic--chevron_left_large"></span></div>
-          <div class="brand">W <b>CLUB</b></div>
-          <div class="more">···</div>
-        </div>
+        <header class="header header--brandFilled">
+          <div class="header__prefix"><button class="header__iconBtn" aria-label="뒤로"><span class="ic ic--arrow_left"></span></button></div>
+          <h1 class="header__title brand">W <b>CLUB</b></h1>
+          <div class="header__suffix"><button class="header__iconBtn" aria-label="더보기"><span class="ic ic--more_vertical"></span></button></div>
+        </header>
 
         <div class="step">STEP 1 · 탐색 카드</div>
         <div class="match-card">
@@ -2223,11 +2656,11 @@ body.embed .step, body.embed .match-card { display: none; } /* 앱에는 설계 
           <span class="time">9:41</span>
           <svg width="62" height="13" viewBox="0 0 62 13" fill="none"><rect x="0" y="4" width="3" height="8" rx="1" fill="var(--fg)"/><rect x="5" y="2.5" width="3" height="9.5" rx="1" fill="var(--fg)"/><rect x="10" y="1" width="3" height="11" rx="1" fill="var(--fg)"/><rect x="15" y="0" width="3" height="12" rx="1" fill="var(--fg)"/><path d="M28 3.5C30.6 1.4 34.4 1.4 37 3.5M29.8 6.2c1.7-1.4 3.7-1.4 5.4 0M31.6 8.9c.8-.7 1.9-.7 2.8 0" stroke="var(--fg)" stroke-width="1.5" stroke-linecap="round"/><rect x="44" y="1.5" width="15" height="9.5" rx="2.4" stroke="var(--fg)" stroke-width="1"/><rect x="45.5" y="3" width="10.5" height="6.5" rx="1.2" fill="var(--fg)"/><path d="M60.5 4.5v3.5c.9-.3 1.5-1 1.5-1.8s-.6-1.4-1.5-1.7z" fill="var(--fg)"/></svg>
         </div>
-        <div class="navbar">
-          <div class="back"><span class="ic ic--chevron_left_large"></span></div>
-          <div class="brand">W <b>CLUB</b></div>
-          <div class="more">···</div>
-        </div>
+        <header class="header header--brandFilled">
+          <div class="header__prefix"><button class="header__iconBtn" aria-label="뒤로"><span class="ic ic--arrow_left"></span></button></div>
+          <h1 class="header__title brand">W <b>CLUB</b></h1>
+          <div class="header__suffix"><button class="header__iconBtn" aria-label="더보기"><span class="ic ic--more_vertical"></span></button></div>
+        </header>
 
         <div class="step">STEP 1 · 탐색 카드</div>
         <div class="match-card">
@@ -2528,7 +2961,7 @@ body.embed .step, body.embed .match-card { display: none; } /* 앱에는 설계 
     attrs.forEach(function(a){ a[0].setAttribute(a[1], a[2].split('W클럽').join(name).split('W CLUB').join(name)); });
     /* 네비바 워드마크: 첫 단어 + 강조 나머지 */
     var mark=MARKS[b]||'W CLUB';
-    document.querySelectorAll('.navbar .brand').forEach(function(el){
+    document.querySelectorAll('.header__title.brand').forEach(function(el){
       var sp=mark.indexOf(' ');
       el.innerHTML = sp>0 ? mark.slice(0,sp)+' <b>'+mark.slice(sp+1)+'</b>' : '<b>'+mark+'</b>';
     });

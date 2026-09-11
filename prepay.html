@@ -2213,7 +2213,6 @@ body.embedded .phone{width:100%;height:100vh;border-radius:0;box-shadow:none}
 
   /* ===================== 매칭 완료 화면 (결제완료 + 매칭됨) ===================== */
   #view-yes{ background:#f4f4f5; }
-  .mc-head{ display:flex; align-items:center; justify-content:space-between; padding:2px 22px 18px; background:#f4f4f5; }
   #view-yes .statusbar, #view-working .statusbar{ background:#f4f4f5; }
   /* 헤더 고정 + 채팅 영역만 스크롤 (활성 상태에서만 flex 레이아웃 적용) */
   #view-yes.on, #view-working.on{ display:flex; flex-direction:column; overflow:hidden; }
@@ -2420,10 +2419,10 @@ body.embedded .phone{width:100%;height:100vh;border-radius:0;box-shadow:none}
   <!-- ===== 컨시어지 작업중 ===== -->
   <section class="screen" id="view-working">
     <div class="statusbar"><span class="time">5:13</span><span class="icons"><svg class="sb-net" viewBox="0 0 18 12" fill="#111"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="4.5" y="4.5" width="3" height="7.5" rx="1"/><rect x="9" y="2.2" width="3" height="9.8" rx="1"/><rect x="13.5" y="0" width="3" height="12" rx="1"/></svg></span></div>
-    <div class="mc-head">
-      <div class="mc-title">만남보장</div>
-      <div class="mc-toggle"><span>매칭받기</span><i class="mc-sw"></i></div>
-    </div>
+    <header class="header header--emphasis header--brandFilled mc-head">
+      <h1 class="header__title">만남보장</h1>
+      <div class="header__suffix"><span class="header__toggle">매칭받기 <button class="header__switch is-on" aria-pressed="true"></button></span></div>
+    </header>
     <div class="mc-chat" id="wk-chat">
       <div class="mc-msg">
         <div class="mc-av"><img src="" data-asset="concierge" alt="컨시어지"/></div>
@@ -2455,10 +2454,10 @@ body.embedded .phone{width:100%;height:100vh;border-radius:0;box-shadow:none}
   <!-- ===== YES 프로필 ===== -->
   <section class="screen" id="view-yes">
     <div class="statusbar"><span class="time">5:13</span><span class="icons"><svg class="sb-net" viewBox="0 0 18 12" fill="#111"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="4.5" y="4.5" width="3" height="7.5" rx="1"/><rect x="9" y="2.2" width="3" height="9.8" rx="1"/><rect x="13.5" y="0" width="3" height="12" rx="1"/></svg></span></div>
-    <div class="mc-head">
-      <div class="mc-title">만남보장</div>
-      <div class="mc-toggle"><span>매칭받기</span><i class="mc-sw"></i></div>
-    </div>
+    <header class="header header--emphasis header--brandFilled mc-head">
+      <h1 class="header__title">만남보장</h1>
+      <div class="header__suffix"><span class="header__toggle">매칭받기 <button class="header__switch is-on" aria-pressed="true"></button></span></div>
+    </header>
     <div class="mc-banner" id="mc-banner-48">미결정 시 자동 만남수락까지 <span class="js-timer48">47:59:59</span> 남음</div>
     <div class="mc-chat play" id="mc-chat">
       <div class="mc-msg">
@@ -3200,6 +3199,260 @@ body[data-brand="startup_match"] .mc-banner{background:var(--bg-statusBanner);}
 
 /* 플레이그라운드 규칙: 그림자 없음 (2026-09-11) */
 *, *::before, *::after { box-shadow: none !important; }
+
+/* ═══ header.css 원문 (홈 헤더 = emphasis · brandFilled) ═══ */
+.header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 60px;
+  padding: 0 var(--spacing-dimension-20);
+  background: var(--navigationBar-filled-bg);
+  color: var(--fg);
+  font-family: var(--text-m-fontFamily, Pretendard), "Pretendard Variable", -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+}
+.header *, .header *::before, .header *::after { box-sizing: inherit; }
+
+/* ── surface ── */
+.header--filled      { background: var(--navigationBar-filled-bg); }
+.header--brandFilled { background: var(--navigationBar-brandFilled-bg); }
+.header--transparent { background: transparent; color: var(--fg-inverse, #fff); }
+.header--transparent.header--accent .header__title,
+.header--transparent.header--accent .header__textBtn,
+.header--transparent.header--accent .header__credit { color: var(--navigationBar-transparent-fg-accent); }
+
+/* ── prefix / suffix 영역 ── */
+.header__prefix,
+.header__suffix {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-dimension-8);
+  flex: none;
+  min-width: var(--spacing-dimension-24);   /* 비어 있어도 제목 중앙 정렬 유지 */
+}
+.header__suffix { margin-left: auto; }
+
+/* 아이콘 버튼 24 (back · close · icon) */
+.header__iconBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--spacing-dimension-24);
+  height: var(--spacing-dimension-24);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  font-family: inherit;
+}
+.header__iconBtn .ic { width: var(--spacing-dimension-24); height: var(--spacing-dimension-24); }
+/* *WithBg: 투명 배경 위에서 아이콘 뒤에 반투명 원 */
+.header__iconBtn--withBg {
+  width: var(--spacing-dimension-32);
+  height: var(--spacing-dimension-32);
+  border-radius: var(--rounded-full);
+  background: var(--navigationBar-icon-bg);
+  color: var(--fg-inverse, #fff);
+}
+.header__iconBtn--withBg .ic { width: var(--spacing-dimension-20); height: var(--spacing-dimension-20); }
+
+/* ── 제목 ── */
+/* 제목은 absolute로 띄워 prefix/suffix 폭과 무관하게 항상 정중앙 (2026-09-11 확정).
+ * max-width = 양쪽에 가장 넓은 suffix(button 64) + 패딩 20 + 간격 8 을 비워 둔 값 */
+.header__title {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  max-width: calc(100% - 184px);
+  margin: 0;
+  text-align: center;
+  pointer-events: none;
+  font-size: var(--title-semibold-2xs-fontSize, 16px);
+  font-weight: var(--title-semibold-2xs-fontWeight, 600);
+  line-height: var(--title-semibold-2xs-lineHeight, 140%);
+  color: inherit;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── emphasis: 큰 제목 좌측 ── */
+.header--emphasis { min-height: 76px; }
+.header--emphasis .header__prefix { display: none; }
+.header--emphasis .header__title {
+  position: static;
+  transform: none;
+  flex: 1;
+  min-width: 0;
+  max-width: none;
+  pointer-events: auto;
+  text-align: left;
+  font-size: var(--title-bold-l-fontSize, 26px);
+  font-weight: var(--title-bold-l-fontWeight, 700);
+  line-height: var(--title-bold-l-lineHeight, 140%);
+  letter-spacing: -.5px;
+}
+
+/* ── suffix 변형 ── */
+.header__textBtn {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: var(--text-medium-m-fontSize, 14px);
+  font-weight: var(--text-medium-m-fontWeight, 500);
+  line-height: var(--text-medium-m-lineHeight, 140%);
+  color: var(--brand-fg);
+}
+.header--transparent .header__textBtn { color: inherit; }
+
+.header__credit {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-dimension-4);
+  height: 28px;
+  padding: 0 var(--spacing-dimension-10) 0 var(--spacing-dimension-8);
+  border-radius: var(--rounded-full);
+  background: var(--bg-inset);
+  color: var(--brand-fg);
+  font-size: var(--text-medium-m-fontSize, 14px);
+  font-weight: var(--text-semibold-m-fontWeight, 600);
+  line-height: 1;
+}
+.header__credit .ic { width: var(--spacing-dimension-16); height: var(--spacing-dimension-16); }
+.header--transparent .header__credit { background: transparent; color: inherit; padding: 0; }
+
+.header__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-dimension-8);
+  font-size: var(--text-medium-m-fontSize, 14px);
+  font-weight: var(--text-medium-m-fontWeight, 500);
+  color: var(--fg-low);
+}
+.header__switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex: none;
+  border: 0;
+  padding: 0;
+  border-radius: var(--rounded-full);
+  background: var(--color-neutral-100);
+  cursor: pointer;
+}
+.header__switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--rounded-full);
+  background: var(--bg-inset, #fff);
+  transition: left .15s ease;
+}
+.header__switch.is-on { background: var(--brand-bg); }
+.header__switch.is-on::after { left: 22px; }
+
+/* suffix 안의 button.css small 버튼: 아이콘+레이블 */
+.header__suffix .btn { flex: none; }
+
+/* ── progressBar ── */
+.header--progressBar {
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0;
+  min-height: 0;
+}
+.header--progressBar .header__bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 60px;
+  padding: 0 var(--spacing-dimension-20);
+}
+.header__progress {
+  position: relative;
+  height: 56px;                 /* 툴팁(위) + 트랙·아바타 행 */
+  --progress: 0%;
+}
+.header__track {
+  position: absolute;
+  left: 0; right: 0;
+  bottom: 10px;
+  height: 4px;
+  border-radius: var(--rounded-full);
+  background: var(--color-neutral-100);
+  overflow: hidden;
+}
+.header__track i {
+  display: block;
+  width: var(--progress);
+  height: 100%;
+  border-radius: inherit;
+  background: var(--brand-bg);
+}
+.header__marker {
+  position: absolute;
+  left: var(--progress);
+  bottom: -2px;
+  transform: translateX(-14px);   /* 아바타 중심을 진행 끝점에 */
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding-right: var(--spacing-dimension-8);
+  border-radius: var(--rounded-full);
+  background: var(--bg-inset, #fff);
+  color: var(--fg);
+  font-size: var(--text-semibold-xs-fontSize, 12px);
+  font-weight: var(--text-semibold-xs-fontWeight, 600);
+  white-space: nowrap;
+}
+.header__markerAvatar {
+  width: 28px; height: 28px;
+  border-radius: var(--rounded-full);
+  object-fit: cover;
+  margin-right: var(--spacing-dimension-4);
+}
+.header__tip {
+  position: absolute;
+  top: 0;
+  /* 아바타(진행 끝점)를 따라가되 좌우 16 안쪽에 머문다 (툴팁 폭 ≈ 250 가정) */
+  left: clamp(var(--spacing-dimension-16), calc(var(--progress) - 14px), calc(100% - var(--spacing-dimension-16) - 250px));
+  display: inline-block;
+  padding: var(--spacing-dimension-6) var(--spacing-dimension-12);
+  border-radius: var(--rounded-m);
+  background: var(--color-brand-400);
+  color: var(--fg-inverse, #fff);
+  font-size: var(--text-medium-xs-fontSize, 12px);
+  font-weight: var(--text-medium-xs-fontWeight, 500);
+  line-height: 140%;
+  white-space: nowrap;
+}
+.header__tip::after {              /* 아바타 쪽 꼬리 */
+  content: "";
+  position: absolute;
+  left: var(--spacing-dimension-12);
+  bottom: -5px;
+  width: 10px; height: 5px;
+  background: inherit;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+/* 툴팁을 행 아래에 두는 변형 (titleType=none · 트랙이 내비 행 중앙을 지날 때) */
+.header--progressBar.header--tipBottom .header__progress { order: 2; height: 68px; }
+.header--progressBar.header--tipBottom .header__track { top: 14px; bottom: auto; }
+.header--progressBar.header--tipBottom .header__marker { top: 2px; bottom: auto; }
+.header--progressBar.header--tipBottom .header__tip { top: auto; bottom: 0; }
+.header--progressBar.header--tipBottom .header__tip::after { bottom: auto; top: -5px; clip-path: polygon(50% 0, 0 100%, 100% 100%); }
+
 </style>
 <div id="brandbar"><span class="bb-cap">BRAND</span><button data-b="wemeet">위밋</button><button data-b="w_standard">W 스탠다드</button><button data-b="wclub">W 클럽</button><button data-b="w_highend">W 하이엔드</button><button data-b="ladyfirst">레이디퍼스트</button><button data-b="highend_dolsing">W 하이엔드 돌싱</button><button data-b="itsmarry">결혼이지</button><button data-b="sky_drop">스카이드롭</button><button data-b="dolsings">돌싱즈</button><button data-b="startup_match">스타트업매치</button></div>
 <script id="brand-switcher">
