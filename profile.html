@@ -7,6 +7,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
 /* 글로벌 공통 (전 브랜드 동일) — 자동 생성 파일 (design-system/build-tokens.js) */
 /* 소스: tokens/global/ + tokens/global/ */
@@ -1313,6 +1314,18 @@ body[data-brand="startup_match"] {
 /* Typography 유틸리티 클래스 */
 
 
+
+/* ── embed 모드: 플레이그라운드 iframe에서 앱 프로필 화면만 출력 ──
+ * 설계 문서(page-head·dev-label·설계 노트)를 감추고 폰 내부를 전체 화면으로.
+ * 남성 화면 = 남성이 보는 여성 프로필, 여성 화면 = 여성이 보는 남성 프로필. */
+body.embed { padding: 0; margin: 0; background: var(--bg); }
+body.embed .page-head, body.embed .dev-label { display: none; }
+body.embed .stage { display: block; max-width: none; margin: 0; }
+body.embed .stage ~ * { display: none !important; }
+body.embed .device { display: none; margin: 0; }
+body.embed .device.on { display: block; }
+body.embed .phone { width: 100%; height: 100vh; border: none; border-radius: 0; box-shadow: none; }
+body.embed .step, body.embed .match-card { display: none; } /* 앱에는 설계 단계 라벨·탐색 카드 없이 상세 프로필부터 */
 </style>
 <link rel="stylesheet" href="../../design-system/components/global/button.css">
 <link rel="stylesheet" href="../../design-system/components/global/icon.css">
@@ -2190,5 +2203,41 @@ body[data-brand="startup_match"] {
 <script>
   if (location.hash === '#flat') document.body.classList.add('flat');
 </script>
-<script>(function(){function ap(b){document.body.dataset.brand=b;}window.__applyBrand=ap;var h=(location.hash||"").replace("#","");ap(h||"wclub");window.addEventListener("hashchange",function(){ap((location.hash||"").replace("#","")||"wclub");});})();</script></body>
+<script>(function(){
+  /* 브랜드 국문 명칭 — 본문의 "W클럽"을 치환 (스타일은 data-brand 토큰이 처리) */
+  var NAMES={wclub:'W클럽',wemeet:'위밋',w_standard:'W 스탠다드',w_highend:'W 하이엔드',ladyfirst:'레이디퍼스트',highend_dolsing:'하이엔드돌싱',dolsings:'돌싱즈',itsmarry:'결혼이지',sky_drop:'스카이드롭',startup_match:'스타트업매치'};
+  var MARKS={wclub:'W CLUB',wemeet:'WE MEET',w_standard:'W STANDARD',w_highend:'W HIGH-END',ladyfirst:'Lady First',highend_dolsing:'HIGHEND DOLSING',dolsings:'DOLSINGS',itsmarry:'결혼이지',sky_drop:'SKY drop',startup_match:'STARTUP MATCH'};
+  var nodes=[], attrs=[];
+  (function collect(){
+    var stage=document.querySelector('.stage'); if(!stage) return;
+    var w=document.createTreeWalker(stage,NodeFilter.SHOW_TEXT,null);
+    while(w.nextNode()){ var v=w.currentNode.nodeValue; if(v.indexOf('W클럽')>=0||v.indexOf('W CLUB')>=0) nodes.push([w.currentNode,v]); }
+    stage.querySelectorAll('[title],[alt]').forEach(function(el){
+      ['title','alt'].forEach(function(at){ var v=el.getAttribute(at); if(v&&v.indexOf('W클럽')>=0) attrs.push([el,at,v]); });
+    });
+  })();
+  function ap(b){
+    var styleB=(b==='ladyfirst')?'w_highend':b; /* 레이디퍼스트: 스타일 상속(w_highend) + 자체 명칭 */
+    document.body.dataset.brand=styleB;
+    var name=NAMES[b]||'W클럽';
+    nodes.forEach(function(n){ n[0].nodeValue=n[1].split('W클럽').join(name).split('W CLUB').join(name); });
+    attrs.forEach(function(a){ a[0].setAttribute(a[1], a[2].split('W클럽').join(name).split('W CLUB').join(name)); });
+    /* 네비바 워드마크: 첫 단어 + 강조 나머지 */
+    var mark=MARKS[b]||'W CLUB';
+    document.querySelectorAll('.navbar .brand').forEach(function(el){
+      var sp=mark.indexOf(' ');
+      el.innerHTML = sp>0 ? mark.slice(0,sp)+' <b>'+mark.slice(sp+1)+'</b>' : '<b>'+mark+'</b>';
+    });
+  }
+  window.__applyBrand=ap;
+  var devices=document.querySelectorAll('.stage .device');
+  function sg(g){ /* 남성 화면 → 여성 프로필(두 번째), 여성 화면 → 남성 프로필(첫 번째) */
+    devices.forEach(function(d,i){ d.classList.toggle('on', g==='male' ? i===1 : i===0); });
+  }
+  window.__setGender=sg;
+  if (window.self !== window.top) { document.body.classList.add('embed'); sg('male'); }
+  var h=(location.hash||"").replace("#","");
+  ap(h||"wclub");
+  window.addEventListener("hashchange",function(){ap((location.hash||"").replace("#","")||"wclub");});
+})();</script></body>
 </html>
